@@ -35,7 +35,8 @@ print "Mean: " + str(mean)
 #print "Median: " + str()
 
 varience = 0
-mode = {}
+mode = {} 
+modePercentage = []
 import math
 for reviewer in reviewers:
 	for review in reviewers[reviewer]:
@@ -48,6 +49,10 @@ print "Standard Deviation: " + str(dev)
 
 for score in range(0,11):
 	print(str(score) + " stars: " + str(mode[str(score)]) + ", " + str(int(float(mode[str(score)])/num*100)))
+
+#Actually important.
+for score in range(0,11):
+	modePercentage.append(float(mode[str(score)])/num)
 
 
 print '\n'
@@ -71,8 +76,9 @@ def Train(reviewers):
 		for review in reviewers[reviewer]: 
 			UpdateWordNet(review['review'], int(review['score']))
 
-def Guess(review, score):
-	print review.encode('utf-8') + '\n'
+def Guess(review, score, show):
+	if(show):
+		print review.encode('utf-8') + '\n'
 	tokens = nltk.word_tokenize(review)
 	model = []
 	for i in range(0,11):
@@ -80,7 +86,7 @@ def Guess(review, score):
 	for word in tokens:
 		if(word in wordReviewNet):
 			for i in range(0,11):
-				model[i] += float(wordReviewNet[word][i])/mode[str(i)]
+				model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11] - modePercentage[i]
 
 	maxNum = 0
 	maxIndex = 0
@@ -88,8 +94,12 @@ def Guess(review, score):
 		if(model[i] > maxNum):
 			maxNum = model[i]
 			maxIndex = i
-		print str(i) + " likelyhood: " + str(model[i])
-	print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
+		if(show):
+			print str(i) + " likelyhood: " + str(model[i])
+	if(show):
+		print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
+		print '\n'
+	return(int(score) == int(maxIndex))
 
 
 
@@ -98,10 +108,14 @@ Train(reviewers)
 print('done\n')
 
 import random
-def DoGuess():
+def DoGuess(show):
 	key = random.choice(reviewers.keys())
-	Guess(reviewers[key][0]['review'], reviewers[key][0]['score'])
-	print '\n'
+	return Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
 
-for i in range(0,5):
-	DoGuess()
+correct = 0
+trials = 1000
+for i in range(0,trials):
+	if(DoGuess(False)):
+		correct+=1
+
+print "\n Accuracy :" + str(float(correct)/trials)
