@@ -99,8 +99,8 @@ def Guess(review, score, show):
 	if(show):
 		print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
 		print '\n'
-	return(int(score) == int(maxIndex))
 
+	return(int(score) == int(maxIndex))
 
 
 print('training model')
@@ -114,8 +114,11 @@ def DoGuess(show):
 
 correct = 0
 trials = 1000
-for i in range(0,trials):
-	if(DoGuess(False)):
-		correct+=1
+#for i in range(0,trials):
+#	if(DoGuess(False)):
+#		correct+=1
 
-print "\n Accuracy :" + str(float(correct)/trials)
+#print "\n Accuracy :" + str(float(correct)/trials)
+
+from Evaluation import evaluate_dist
+evaluate_dist(reviewers, wordReviewNet, modePercentage)
