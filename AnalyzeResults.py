@@ -10,6 +10,20 @@ print str(len(reviewers)) + " reviewers found."
 
 duplicates = {}
 
+train_size = 6000
+train_reviews = []
+test_reviews = []
+
+c = train_size
+for reviewer in reviewers:
+	for review in reviewers[reviewer]:
+		if(c > 0):
+			train_reviews.append(review)
+			c-=1
+		else:
+			test_reviews.append(review)
+
+
 for reviewer in reviewers:
 	if(len(reviewers[reviewer]) > 4):
 		duplicates[reviewer] = reviewers[reviewer]
@@ -113,9 +127,9 @@ def DoGuess(show):
 	return Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
 
 correct = 0
-trials = 1000
+trials = 5
 for i in range(0,trials):
-	if(DoGuess(False)):
+	if(DoGuess(True)):
 		correct+=1
 
 print "\n Accuracy :" + str(float(correct)/trials)
