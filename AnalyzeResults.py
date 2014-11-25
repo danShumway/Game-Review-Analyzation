@@ -6,11 +6,9 @@ print "Analyzing results"
 
 #----------------BASIC STATS------------------------------
 
-print str(len(reviewers)) + " reviewers found."
-
 duplicates = {}
 
-train_size = 6000
+train_size = 8000
 train_reviews = []
 test_reviews = []
 
@@ -22,6 +20,8 @@ for reviewer in reviewers:
 			c-=1
 		else:
 			test_reviews.append(review)
+
+print str(len(test_reviews) + len(train_reviews)) + " reviews found."
 
 
 for reviewer in reviewers:
@@ -85,9 +85,8 @@ def UpdateWordNet(review, score):
 		wordReviewNet[word][score]+=1;
 		wordReviewNet[word][11]+=1;
 
-def Train(reviewers):
-	for reviewer in reviewers:
-		for review in reviewers[reviewer]: 
+def Train(train_data):
+		for review in train_data: 
 			UpdateWordNet(review['review'], int(review['score']))
 
 def Guess(review, score, show):
@@ -113,12 +112,12 @@ def Guess(review, score, show):
 	if(show):
 		print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
 		print '\n'
+
 	return(int(score) == int(maxIndex))
 
 
-
 print('training model')
-Train(reviewers)
+Train(train_reviews)
 print('done\n')
 
 import random
@@ -127,9 +126,12 @@ def DoGuess(show):
 	return Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
 
 correct = 0
-trials = 5
-for i in range(0,trials):
-	if(DoGuess(True)):
-		correct+=1
+trials = 1000
+#for i in range(0,trials):
+#	if(DoGuess(False)):
+#		correct+=1
 
-print "\n Accuracy :" + str(float(correct)/trials)
+#print "\n Accuracy :" + str(float(correct)/trials)
+
+from Evaluation import evaluate_rigorous_dist
+evaluate_rigorous_dist(test_reviews, wordReviewNet, modePercentage)
