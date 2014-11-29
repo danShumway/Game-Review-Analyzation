@@ -62,6 +62,8 @@ def DoGuessDist(show, reviewers, wRN, mP):
 	key = random.choice(reviewers.keys())
 	return GuessDist(reviewers[key][0]['review'], reviewers[key][0]['score'], show, wRN, mP)
             
+
+#Some clarification.            
 def GuessDist(review, score, show, wordReviewNet, modePercentage):
 	if(show):
 		print review.encode('utf-8') + '\n'

@@ -125,6 +125,8 @@ from Model import Model
 
 test_model = Model()
 
+test_model.UpdateBaselines(train_reviews)
+
 
 print('training model')
 test_model.Train(train_reviews)
@@ -144,4 +146,4 @@ trials = 1000
 #print "\n Accuracy :" + str(float(correct)/trials)
 
 from Evaluation import evaluate_rigorous_dist
-evaluate_rigorous_dist(test_reviews, wordReviewNet, modePercentage)
+evaluate_rigorous_dist(test_reviews, test_model.wordReviewNet, modePercentage)
