@@ -1,4 +1,6 @@
 import json
+
+
 f = open('databases/reviews.json', 'r')
 reviewers = json.loads(f.read())
 
@@ -73,6 +75,9 @@ print '\n'
 
 print('defining functions')
 
+
+
+"""
 import nltk
 wordReviewNet = {}
 def UpdateWordNet(review, score):
@@ -114,16 +119,21 @@ def Guess(review, score, show):
 		print '\n'
 
 	return(int(score) == int(maxIndex))
+"""
+
+from Model import Model
+
+test_model = Model()
 
 
 print('training model')
-Train(train_reviews)
+test_model.Train(train_reviews)
 print('done\n')
 
 import random
 def DoGuess(show):
 	key = random.choice(reviewers.keys())
-	return Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
+	return test_model.Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
 
 correct = 0
 trials = 1000
