@@ -128,6 +128,9 @@ print "Mean: " + str(test_model.mean)
 
 
 print('training model')
+
+from nltk.corpus import stopwords
+test_model.exclude = stopwords.words('english')
 test_model.Train(train_reviews)
 print('done, running evaluations.\n')
 

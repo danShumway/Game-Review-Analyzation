@@ -53,7 +53,7 @@ class Model:
 	def UpdateWordNet(self, review, score):
 		tokens = nltk.word_tokenize(review)
 		for word in tokens:
-			if(self.exclude == None or self.exclude(word)):
+			if(self.exclude == None or word not in self.exclude):#self.exclude(word)):
 				if(word not in self.wordReviewNet):
 					self.wordReviewNet[word] = []
 					for i in range(0, 12):
