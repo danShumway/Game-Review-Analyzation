@@ -53,18 +53,21 @@ class Model:
 	def UpdateWordNet(self, review, score):
 		tokens = nltk.word_tokenize(review)
 		for word in tokens:
-			if(self.exclude == None or word not in self.exclude):#self.exclude(word)):
-				if(word not in self.wordReviewNet):
-					self.wordReviewNet[word] = []
-					for i in range(0, 12):
-						self.wordReviewNet[word].append(0)
-				self.wordReviewNet[word][score]+=1
-				self.wordReviewNet[word][11]+=1 #Count of how often we've seen the word.
+			if(word not in self.wordReviewNet):
+				self.wordReviewNet[word] = []
+				for i in range(0, 12):
+					self.wordReviewNet[word].append(0)
+			self.wordReviewNet[word][score]+=1
+			self.wordReviewNet[word][11]+=1 #Count of how often we've seen the word.
 
 	#
 	def Train(self, train_data):
 		for review in train_data:
 			self.UpdateWordNet(review['review'], int(review['score']))
+
+		import json
+		f = open('databases/wordNet.json', 'w')
+		f.write(json.dumps(self.wordReviewNet))
 
 
 	def Guess(self, review, score, show):
@@ -75,9 +78,10 @@ class Model:
 		for i in range(0,11):
 			model.append(0)
 		for word in tokens:
-			if(word in self.wordReviewNet):
-				for i in range(0,11):
-					model[i] += float(self.wordReviewNet[word][i])/self.wordReviewNet[word][11] - self.baselines[i]
+			if(self.exclude == None or word not in self.exclude):#self.exclude(word)):
+				if(word in self.wordReviewNet):
+					for i in range(0,11):
+						model[i] += float(self.wordReviewNet[word][i])/self.wordReviewNet[word][11] - self.baselines[i]
 
 		maxNum = 0
 		maxIndex = 0

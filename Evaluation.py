@@ -33,7 +33,7 @@ def bin_results(review, actual, guess):
             return True
         else:
             return False
-     
+
 
 # Evaluate with partial credit accuracy
 # (using inverse of distance from correct answer)
@@ -43,7 +43,7 @@ def evaluate_dist(reviewers, wRN, mP):
     correct = 0
     trials = 1000
     for i in range(0,trials):
-    	correct += DoGuessDist(False, reviewers, wRN, mP)
+        correct += DoGuessDist(False, reviewers, wRN, mP)
      
     print "\n Weighted Accuracy :" + str(float(correct)/trials)
 
@@ -59,39 +59,39 @@ def DoRigorousGuessDist(show, review, wRN, mP):
 
 
 def DoGuessDist(show, reviewers, wRN, mP):
-	key = random.choice(reviewers.keys())
-	return GuessDist(reviewers[key][0]['review'], reviewers[key][0]['score'], show, wRN, mP)
+    key = random.choice(reviewers.keys())
+    return GuessDist(reviewers[key][0]['review'], reviewers[key][0]['score'], show, wRN, mP)
             
 
 #Some clarification.            
 def GuessDist(review, score, show, wordReviewNet, modePercentage):
-	if(show):
-		print review.encode('utf-8') + '\n'
-	tokens = nltk.word_tokenize(review)
-	model = []
-	for i in range(0,11):
-		model.append(0)
-	for word in tokens:
-		if(word in wordReviewNet):
-			for i in range(0,11):
-				model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11] - modePercentage[i]
+    if(show):
+        print review.encode('utf-8') + '\n'
+    tokens = nltk.word_tokenize(review)
+    model = []
+    for i in range(0,11):
+        model.append(0)
+    for word in tokens:
+        if(word in wordReviewNet):
+            for i in range(0,11):
+                model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11] - modePercentage[i]
 
-	maxNum = 0
-	maxIndex = 0
-	for i in range(0, 11):
-		if(model[i] > maxNum):
-			maxNum = model[i]
-			maxIndex = i
-		if(show):
-			print str(i) + " likelyhood: " + str(model[i])
-	if(show):
-		print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
-		print '\n'
- 
-	# Return partial or full scores
-	if int(score) == int(maxIndex):
-		return 1
-	elif abs(int(score) - int(maxIndex) ) > 3:
-             return 0
-	else:
-		return 1 / float(abs(int(score) - int(maxIndex)))
+    maxNum = 0
+    maxIndex = 0
+    for i in range(0, 11):
+        if(model[i] > maxNum):
+            maxNum = model[i]
+            maxIndex = i
+        if(show):
+            print str(i) + " likelyhood: " + str(model[i])
+    if(show):
+        print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
+        print '\n'
+        
+    # Return partial or full scores
+    if (int(score) == int(maxIndex)):
+        return 1
+    elif (abs(int(score) - int(maxIndex) ) > 3):
+        return 0
+    else:
+        return 1 / float(abs(int(score) - int(maxIndex)))

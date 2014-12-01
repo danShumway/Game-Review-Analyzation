@@ -1,7 +1,7 @@
 import json
 
 
-f = open('databases/reviews.json', 'r')
+f = open('databases/reviewsAll.json', 'r')
 reviewers = json.loads(f.read())
 
 print "Analyzing results"
@@ -10,7 +10,7 @@ print "Analyzing results"
 
 duplicates = {}
 
-train_size = 8000
+train_size = 17000
 train_reviews = []
 test_reviews = []
 

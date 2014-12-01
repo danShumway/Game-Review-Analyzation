@@ -4,9 +4,11 @@
 
 import unirest
 
-url = "https://byroredux-metacritic.p.mashape.com/user-reviews?page_count=1&url=http%3A%2F%2Fwww.metacritic.com%2Fgame%2Fpc%2F"
-games_to_test = []#['Minecraft', 'World of Warcraft', 'Diablo III', 'Half-Life 2', 'Starcraft', 'The Sims 3', 'Guild Wars', 'Myst', 'Riven', 'Far Cry', 'The Witcher', 'Spore', 'Quake', 'American McGee\'s Alice', 'Dungeon Siege', 'Duke Nukem', 'BioShock', 'Frogger', 'Hotel Giant']
+unirest.timeout(45);
 
+url = "https://byroredux-metacritic.p.mashape.com/user-reviews?page_count=5&url=http%3A%2F%2Fwww.metacritic.com%2Fgame%2F"
+url2 = "https://byroredux-metacritic.p.mashape.com/user-reviews?page_count=5&url=";
+games_to_test = []#['Minecraft', 'World of Warcraft', 'Diablo III', 'Half-Life 2', 'Starcraft', 'The Sims 3', 'Guild Wars', 'Myst', 'Riven', 'Far Cry', 'The Witcher', 'Spore', 'Quake', 'American McGee\'s Alice', 'Dungeon Siege', 'Duke Nukem', 'BioShock', 'Frogger', 'Hotel Giant']
 
 
 reviewers = {}
@@ -20,10 +22,30 @@ def loadGames(file):
 		games_to_test.append(g[0])
 
 
+#New import
+def addReviewersNonSelective(game, game_url, name):
+	response = unirest.get(url2 + game_url,
+	  headers={
+	    "X-Mashape-Key": "Ug4hutuQNzmshzdMN8dNqV6v7Yi8p10pmmejsnKJl5NdrIzRMP"
+	  }
+	)
+
+
+	if ("reviews" in response.body):
+		num_results = 0
+		for review in response.body['reviews']:
+			num_results+=1
+			if(review['name'] not in reviewers):
+				reviewers[review['name']] = list()
+			reviewers[review['name']].append(review)
+			games[name].append(review)
+		print "		got " + str(num_results) + " reviews"
+
+
 
 #Import stuff.
 def addReviewers(game, name):
-	response = unirest.get(url + game,
+	response = unirest.get(url + "pc%2F" + game,
 	  headers={
 	    "X-Mashape-Key": "Ug4hutuQNzmshzdMN8dNqV6v7Yi8p10pmmejsnKJl5NdrIzRMP"
 	  }
@@ -50,7 +72,7 @@ def getReviewsFromSearch(title):
 	  },
 	  params={
 	    "max_pages": 1,
-	    "platform": 3,
+	    #"platform": 3,
 	    "retry": 4,
 	    "title": title
 	  }
@@ -62,18 +84,20 @@ def getReviewsFromSearch(title):
 				games[game["name"]] = list()
 				name = game["name"].lower().replace(" ", "-").replace(":", "").replace("'", "")
 				print("	getting reviews from " + name)
-				addReviewers(name, game["name"])
+				#addReviewers(name, game["name"])
+				addReviewersNonSelective(name, game["url"], game["name"])
+
+import json
+def Write():
+	f = open('databases/reviewsAll.json', 'w')
+	f.write(json.dumps(reviewers))
 
 
 loadGames('databases/games.json')
 for name in games_to_test:
 	print("searching " + name.encode('utf-8'))
 	getReviewsFromSearch(name)
+	Write()
 
 print "Pulled Down " + str(len(reviewers)) + " reviews."
 
-
-print "Writing results to file."
-import json
-f = open('databases/reviews.json', 'w')
-f.write(json.dumps(reviewers))
