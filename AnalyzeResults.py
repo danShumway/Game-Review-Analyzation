@@ -74,9 +74,6 @@ for score in range(0,11):
 print '\n'
 
 print('defining functions')
-
-
-
 """
 import nltk
 wordReviewNet = {}
@@ -127,23 +124,15 @@ test_model = Model()
 
 test_model.UpdateBaselines(train_reviews)
 
+print "Mean: " + str(test_model.mean)
+
 
 print('training model')
 test_model.Train(train_reviews)
-print('done\n')
+print('done, running evaluations.\n')
 
-import random
-def DoGuess(show):
-	key = random.choice(reviewers.keys())
-	return test_model.Guess(reviewers[key][0]['review'], reviewers[key][0]['score'], show)
-
-correct = 0
-trials = 1000
-#for i in range(0,trials):
-#	if(DoGuess(False)):
-#		correct+=1
-
-#print "\n Accuracy :" + str(float(correct)/trials)
 
 from Evaluation import evaluate_rigorous_dist
 evaluate_rigorous_dist(test_reviews, test_model.wordReviewNet, modePercentage)
+
+test_model.Guess(test_reviews[0]["review"], test_reviews[0]["score"], True)

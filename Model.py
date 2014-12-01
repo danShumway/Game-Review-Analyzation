@@ -39,6 +39,8 @@ class Model:
 
 		self.mean = float(total)/num #Average.
 
+		print self.baselines
+
 
 		variance = 0
 		for review in train_reviews:
@@ -51,8 +53,8 @@ class Model:
 	def UpdateWordNet(self, review, score):
 		tokens = nltk.word_tokenize(review)
 		for word in tokens:
-			if(word not in self.wordReviewNet):
-				if(self.exclude == None or self.exclude(word)):
+			if(self.exclude == None or self.exclude(word)):
+				if(word not in self.wordReviewNet):
 					self.wordReviewNet[word] = []
 					for i in range(0, 12):
 						self.wordReviewNet[word].append(0)
@@ -73,9 +75,9 @@ class Model:
 		for i in range(0,11):
 			model.append(0)
 		for word in tokens:
-			if(word in wordReviewNet):
+			if(word in self.wordReviewNet):
 				for i in range(0,11):
-					model[i] += float(self.wordReviewNet[word][i])/self.wordReviewNet[word][11] - modePercentage[i]
+					model[i] += float(self.wordReviewNet[word][i])/self.wordReviewNet[word][11] - self.baselines[i]
 
 		maxNum = 0
 		maxIndex = 0
