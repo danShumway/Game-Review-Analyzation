@@ -47,18 +47,20 @@ def evaluate_dist(reviewers, wRN, mP):
      
     print "\n Weighted Accuracy :" + str(float(correct)/trials)
 
-def evaluate_rigorous_dist(test_data, wRN, mP):
+def evaluate_rigorous_dist(test_data, wRN, mP, model):
+
     correct = 0
     for review in test_data:
-        correct += DoRigorousGuessDist(False, review, wRN, mP)
+        correct += DoRigorousGuessDist(False, review, wRN, mP, model)
 
     print "\n Weighted Accuracy :" + str(float(correct)/len(test_data)) + " out of " + str(len(test_data)) + " trials."
 
-def DoRigorousGuessDist(show, review, wRN, mP):
-    return GuessDist(review['review'], review['score'], show, wRN, mP)
+def DoRigorousGuessDist(show, review, wRN, mP, model):
+    return model.Guess(review['review'], review['score'], show)
+    #return GuessDist(review['review'], review['score'], show, wRN, mP, model)
 
 
-def DoGuessDist(show, reviewers, wRN, mP):
+def DoGuessDist(show, reviewers, wRN, mP,):
     key = random.choice(reviewers.keys())
     return GuessDist(reviewers[key][0]['review'], reviewers[key][0]['score'], show, wRN, mP)
             
@@ -74,7 +76,7 @@ def GuessDist(review, score, show, wordReviewNet, modePercentage):
     for word in tokens:
         if(word in wordReviewNet):
             for i in range(0,11):
-                model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11] - modePercentage[i]
+                model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11]# - modePercentage[i]
 
     maxNum = 0
     maxIndex = 0
@@ -87,11 +89,11 @@ def GuessDist(review, score, show, wordReviewNet, modePercentage):
     if(show):
         print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
         print '\n'
-        
+
     # Return partial or full scores
     if (int(score) == int(maxIndex)):
         return 1
     elif (abs(int(score) - int(maxIndex) ) > 3):
         return 0
     else:
-        return 1 / float(abs(int(score) - int(maxIndex)))
+        return 0#return 1 / float(abs(int(score) - int(maxIndex)))

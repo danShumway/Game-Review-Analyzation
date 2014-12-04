@@ -1,4 +1,5 @@
 import json
+import random
 
 
 f = open('databases/reviewsAll.json', 'r')
@@ -10,18 +11,23 @@ print "Analyzing results"
 
 duplicates = {}
 
-train_size = 17000
+train_size = 22000
 train_reviews = []
 test_reviews = []
 
-c = train_size
+total_set = []
 for reviewer in reviewers:
 	for review in reviewers[reviewer]:
-		if(c > 0):
-			train_reviews.append(review)
-			c-=1
-		else:
-			test_reviews.append(review)
+		total_set.append(review)
+#random.shuffle(total_set)
+
+c = train_size
+for review in total_set:
+	if(c > 0):
+		train_reviews.append(review)
+		c-=1
+	else:
+		test_reviews.append(review)
 
 print str(len(test_reviews) + len(train_reviews)) + " reviews found."
 
@@ -136,6 +142,6 @@ print('done, running evaluations.\n')
 
 
 from Evaluation import evaluate_rigorous_dist
-evaluate_rigorous_dist(test_reviews, test_model.wordReviewNet, modePercentage)
+evaluate_rigorous_dist(test_reviews, test_model.wordReviewNet, modePercentage, test_model)
 
 test_model.Guess(test_reviews[0]["review"], test_reviews[0]["score"], True)
