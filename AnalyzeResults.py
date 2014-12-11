@@ -144,4 +144,27 @@ print('done, running evaluations.\n')
 from Evaluation import evaluate_rigorous_dist
 evaluate_rigorous_dist(test_reviews, test_model.wordReviewNet, modePercentage, test_model)
 
-test_model.Guess(test_reviews[0]["review"], test_reviews[0]["score"], True)
+#test_model.Guess(test_reviews[0]["review"], test_reviews[0]["score"], True)
+
+### Generate confusion matrix of scores
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+
+score_true = []
+score_guess = []
+
+for i, review in enumerate(test_reviews):
+    score_true.append(int(review['score']))
+    score_guess.append(test_model.GuessScore(review['review']))
+
+cm = confusion_matrix(score_true, score_guess)
+plt.matshow(cm)
+plt.colorbar()
+plt.xlabel('Predicted Score')
+plt.ylabel('True Score')
+
+### Precision Recall F1
+from sklearn.metrics import precision_recall_fscore_support
+
+prfs = precision_recall_fscore_support(score_true, score_guess)
+

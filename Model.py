@@ -107,3 +107,25 @@ class Model:
             return 0
         else:
             return 1 / float(abs(int(score) - int(maxIndex)) + 1)
+
+    def GuessScore(self, review):
+        tokens = RegexpTokenizer(r'\w+').tokenize(review.lower())
+        #tokens = nltk.word_tokenize(review)
+        model = []
+        for i in range(0,11):
+            model.append(0)
+        for word in tokens:
+            if(self.exclude == None or word not in self.exclude):#self.exclude(word)):
+                if(word in self.wordReviewNet):
+                    for i in range(0,11):
+                        model[i] += ((float(self.wordReviewNet[word][i])/self.wordReviewNet[word][11]) - self.baselines[i])
+
+        maxNum = 0
+        maxIndex = 0
+        for i in range(0, 11):
+            if(model[i] > maxNum):
+                maxNum = model[i]
+                maxIndex = i
+        
+        return maxIndex
+ 
