@@ -79,51 +79,6 @@ for score in range(0,11):
 
 print '\n'
 
-print('defining functions')
-"""
-import nltk
-wordReviewNet = {}
-def UpdateWordNet(review, score):
-	tokens = nltk.word_tokenize(review)
-	for word in tokens:
-		if(word not in wordReviewNet):
-			wordReviewNet[word] = []
-			for i in range(0,12):
-				wordReviewNet[word].append(0)
-		wordReviewNet[word][score]+=1;
-		wordReviewNet[word][11]+=1;
-
-def Train(train_data):
-		for review in train_data: 
-			UpdateWordNet(review['review'], int(review['score']))
-
-def Guess(review, score, show):
-	if(show):
-		print review.encode('utf-8') + '\n'
-	tokens = nltk.word_tokenize(review)
-	model = []
-	for i in range(0,11):
-		model.append(0)
-	for word in tokens:
-		if(word in wordReviewNet):
-			for i in range(0,11):
-				model[i] += float(wordReviewNet[word][i])/wordReviewNet[word][11] - modePercentage[i]
-
-	maxNum = 0
-	maxIndex = 0
-	for i in range(0, 11):
-		if(model[i] > maxNum):
-			maxNum = model[i]
-			maxIndex = i
-		if(show):
-			print str(i) + " likelyhood: " + str(model[i])
-	if(show):
-		print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
-		print '\n'
-
-	return(int(score) == int(maxIndex))
-"""
-
 from Model import Model
 
 test_model = Model()
