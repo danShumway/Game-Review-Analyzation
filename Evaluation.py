@@ -39,6 +39,7 @@ def bin_results(review, actual, guess):
 # (using inverse of distance from correct answer)
 import random
 import nltk
+import math
 def evaluate_dist(reviewers, wRN, mP):
     correct = 0
     trials = 1000
@@ -53,6 +54,7 @@ def evaluate_rigorous_dist(test_data, wRN, mP, model):
     for review in test_data:
         correct += DoRigorousGuessDist(False, review, wRN, mP, model)
 
+    #print "Standard deviation : " + str(math.sqrt(float(correct)/len(test_data)))
     print "\n Weighted Accuracy :" + str(float(correct)/len(test_data)) + " out of " + str(len(test_data)) + " trials."
 
 def DoRigorousGuessDist(show, review, wRN, mP, model):

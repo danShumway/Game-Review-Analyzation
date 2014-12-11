@@ -19,7 +19,7 @@ total_set = []
 for reviewer in reviewers:
 	for review in reviewers[reviewer]:
 		total_set.append(review)
-#random.shuffle(total_set)
+random.shuffle(total_set)
 
 c = train_size
 for review in total_set:

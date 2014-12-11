@@ -99,7 +99,8 @@ class Model:
             print("Actual score: " + str(score) + ", guessed " + str(maxIndex))
             print '\n'
 
-        #return(int(score) == int(maxIndex))
+       # return math.pow(int(score) - int(10), 2)
+        return(int(score) == int(maxIndex))
         if (int(score) == int(maxIndex)):
             return 1
         elif (abs(int(score) - int(maxIndex) ) > 3):
