@@ -9,4 +9,12 @@ The model loops through a training set of reviews and builds a dictionary of all
 
 ##How do I use it?
 
-Good question, I'll get back to you once the code is cleaned up.
+The model is split into 3 different scripts.
+
+ - **getGames.py**:
+ - **getReviews.py**:
+ - **AnalyzeResults.py**:
+
+Normally, you would be required to run these scripts in order, as each relies on the output from the previous script.  However, because we have included the output from each script when we last ran them, you'll likely want to run only AnalyzeResults.py.
+
+Running this script will output some data about the training set, train the model (storing the dictionary in databases/wordNet.json, and then test the model, outputing an example, and the weighted accuracy from the test.
